@@ -1,13 +1,13 @@
 charuco_detector:
   ros__parameters:
     charuco_parameters:
-      squaresSidesSizeM: 0.0200
-      markersSidesSizeM: 0.0150
+      squaresSidesSizeM: 0.0150
+      markersSidesSizeM: 0.0110
       numberOfBitsForMarkersSides: 4
-      numberOfMarkers: 70
-      numberOfSquaresInX: 10
-      numberOfSquaresInY: 14
-      dictionaryId: 3
+      numberOfMarkers: 44
+      numberOfSquaresInX: 11
+      numberOfSquaresInY: 8
+      dictionaryId: 0
     function_parameters:
       use_median_blur: false
       median_blur_k_size: 6
