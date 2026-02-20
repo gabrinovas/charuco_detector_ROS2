@@ -86,6 +86,7 @@ ChArUcoDetector::ChArUcoDetector()
 	}
 
 ChArUcoDetector::~ChArUcoDetector() {}
+
 void ChArUcoDetector::setupConfigurationFromParameterServer() {
 
 	detector_parameters_ = cv::aruco::DetectorParameters::create();
@@ -160,6 +161,7 @@ void ChArUcoDetector::setupConfigurationFromParameterServer() {
 	board_ = cv::aruco::CharucoBoard::create(number_of_squares_in_x_, number_of_squares_in_y_,
 											 static_cast<float>(squares_sides_size_m_), static_cast<float>(markers_sides_size_m_), dictionary_);
 }
+
 void ChArUcoDetector::startDetection() {
 
   	rclcpp::QoS image_publisher_qos(imageQueueSize);
@@ -190,40 +192,42 @@ void ChArUcoDetector::startDetection() {
 		// rclcpp::spin(node_handle_);
 	}
 }
-void ChArUcoDetector::getCameraCalibrationCoefficient() {
 
-	inih::INIReader Camera_KD{file_path_};
+// void ChArUcoDetector::getCameraCalibrationCoefficient() {  // <--- FUNCIÓN ELIMINADA
+//
+// 	inih::INIReader Camera_KD{file_path_};
+//
+// 	if (Camera_KD.ParseError() != 0) {
+//     	std::cout << "Can't load 'camera_calibration.ini'\n";
+//     	return;
+// 	}
+// 	camera_intrinsics_matrix = cv::Mat::zeros(3, 3, CV_64F);
+// 	camera_distortion_coefficients_matrix = cv::Mat::zeros(1, 5, CV_64F);
+//
+// 	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "k1")));
+// 	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "k2")));
+// 	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "t1")));
+// 	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "t2")));
+// 	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "k3")));
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "0_0"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "0_1"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "0_2"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "1_0"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "1_1"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "1_2"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "2_0"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "2_1"))); 
+// 	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "2_2"))); 
+// 	for (int i = 0; i < 3; i++) {
+// 		for (int j = 0; j < 3; j++) {
+// 			camera_intrinsics_matrix.at<double>(i, j) = intrinsic[i * 3 + j];
+// 		}
+// 	}
+// 	for (int i = 0; i < 5; i++) {
+// 		camera_distortion_coefficients_matrix.at<double>(0, i) = distortion[i];
+// 	}
+// }
 
-	if (Camera_KD.ParseError() != 0) {
-    	std::cout << "Can't load 'camera_calibration.ini'\n";
-    	return;
-	}
-	camera_intrinsics_matrix = cv::Mat::zeros(3, 3, CV_64F);
-	camera_distortion_coefficients_matrix = cv::Mat::zeros(1, 5, CV_64F);
-
-	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "k1")));
-	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "k2")));
-	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "t1")));
-	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "t2")));
-	distortion.push_back(std::stod(Camera_KD.Get("Distortion", "k3")));
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "0_0"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "0_1"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "0_2"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "1_0"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "1_1"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "1_2"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "2_0"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "2_1"))); 
-	intrinsic.push_back(std::stod(Camera_KD.Get("Intrinsic", "2_2"))); 
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			camera_intrinsics_matrix.at<double>(i, j) = intrinsic[i * 3 + j];
-		}
-	}
-	for (int i = 0; i < 5; i++) {
-		camera_distortion_coefficients_matrix.at<double>(0, i) = distortion[i];
-	}
-}
 void ChArUcoDetector::cameraInfoCallback(const sensor_msgs::msg::CameraInfo::ConstSharedPtr &_msg) {
 	bool valid_camera_info = false;
 	for (size_t i = 0; i < _msg->k.size(); ++i) {
@@ -233,23 +237,39 @@ void ChArUcoDetector::cameraInfoCallback(const sensor_msgs::msg::CameraInfo::Con
 		}
 	}
 	if (valid_camera_info) {
-		getCameraCalibrationCoefficient();
-		camera_info_ = _msg;
-		// camera_intrinsics_matrix = cv::Mat::zeros(3, 3, CV_64F);
-		// camera_distortion_coefficients_matrix = cv::Mat::zeros(1, 5, CV_64F);
-		// for (int i = 0; i < 3; i++) {
-		// 	for (int j = 0; j < 3; j++) {
-		// 		camera_intrinsics_matrix.at<double>(i, j) = _msg->K[i * 3 + j];
-		// 	}
-		// }
-		// for (int i = 0; i < 5; i++) {
-		// 	camera_distortion_coefficients_matrix.at<double>(0, i) = _msg->D[i];
-		// }
+		// Guardamos el mensaje por si acaso, pero lo importante es llenar las matrices.
+        camera_info_ = _msg;
+
+        // --- NUEVO: Inicializar las matrices de OpenCV desde el mensaje de ROS ---
+        camera_intrinsics_matrix = cv::Mat::zeros(3, 3, CV_64F);
+        camera_distortion_coefficients_matrix = cv::Mat::zeros(1, 5, CV_64F);
+
+        // Rellenar la matriz intrínseca (K)
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // El índice en el array K de CameraInfo es i*3 + j
+                camera_intrinsics_matrix.at<double>(i, j) = _msg->K[i * 3 + j];
+            }
+        }
+        // Rellenar los coeficientes de distorsión (D). Para plumb_bob, D tiene 5 elementos.
+        for (int i = 0; i < 5 && i < _msg->D.size(); ++i) {
+            camera_distortion_coefficients_matrix.at<double>(0, i) = _msg->D[i];
+        }
+        // --- FIN NUEVO ---
+
+        RCLCPP_INFO(get_logger(), "Camera intrinsics loaded from topic.");
 	} else {
 		RCLCPP_WARN(get_logger(),"Received invalid camera intrinsics (K all zeros)");
 	}
 }
+
 void ChArUcoDetector::imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr &_msg) {
+
+	// --- CAMBIO IMPORTANTE: Comprobar que tenemos las matrices de la cámara ---
+    if (camera_intrinsics_matrix.empty() || camera_distortion_coefficients_matrix.empty()) {
+        RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 5000, "Camera intrinsics not received yet. Skipping frame.");
+        return;
+    }
 
 	if (camera_info_) {
 		if (_msg->data.empty() || _msg->step == 0) {
@@ -317,11 +337,13 @@ void ChArUcoDetector::imageCallback(const sensor_msgs::msg::Image::ConstSharedPt
 		RCLCPP_WARN(get_logger(),"Discarded image because a valid CameraInfo was not received yet");
 	}
 }
+
 void ChArUcoDetector::applyMedianBlur(cv::Mat &image_in_out_) {
 	cv::Mat temp;
 	cv::medianBlur(image_in_out_, temp, median_blur_k_size_);
 	image_in_out_ = temp;
 }
+
 void ChArUcoDetector::applyDynamicRange(cv::Mat& image_in_out_) {
 	double min = 0;
 	double max = 65535;
@@ -329,22 +351,26 @@ void ChArUcoDetector::applyDynamicRange(cv::Mat& image_in_out_) {
 	cv::Mat temp = cv::Mat(image_in_out_ - min);
 	temp.convertTo(image_in_out_, CV_8UC1, 255 / (max - min));
 }
+
 void ChArUcoDetector::applyBilateralFilter(cv::Mat &image_in_out_) {
 	cv::Mat temp;
 	cv::bilateralFilter(image_in_out_, temp, bilateral_filter_pixel_neighborhood_, bilateral_filter_sigma_color_, bilateral_filter_sigma_space_, bilateral_filter_border_type_);
 	image_in_out_ = temp;
 }
+
 void ChArUcoDetector::applyCLAHE(cv::Mat &image_in_out_) {
 	auto clahe = cv::createCLAHE(clahe_clip_limit_, cv::Size(clahe_size_x_, clahe_size_y_));
 	cv::Mat temp;
 	clahe->apply(image_in_out_, temp);
 	image_in_out_ = temp;
 }
+
 void ChArUcoDetector::applyAdaptiveThreshold(cv::Mat &image_in_out_) {
 	cv::Mat temp;
 	cv::adaptiveThreshold(image_in_out_, temp, adaptive_threshold_max_value_, adaptive_threshold_method_, adaptive_threshold_type_, adaptive_threshold_block_size_, adaptive_threshold_constant_offset_from_mean_);
 	image_in_out_ = temp;
 }
+
 bool ChArUcoDetector::detectChArUcoBoard(const cv::Mat &_image_grayscale, const cv::Mat &_camera_intrinsics, const cv::Mat &_camera_distortion_coefficients,
 										 cv::Vec3d &_camera_rotation_out, cv::Vec3d &_camera_translation_out,
 										 cv::InputOutputArray _image_with_detection_results, bool _show_rejected_markers) {
@@ -383,6 +409,7 @@ bool ChArUcoDetector::detectChArUcoBoard(const cv::Mat &_image_grayscale, const 
 	}
 	return false;
 }
+
 void ChArUcoDetector::fillPose(const cv::Vec3d &_camera_rotation, const cv::Vec3d &_camera_translation, geometry_msgs::msg::PoseStamped &_pose_in_out) {
 	cv::Mat rotation_matrix;
 	cv::Rodrigues(_camera_rotation, rotation_matrix);

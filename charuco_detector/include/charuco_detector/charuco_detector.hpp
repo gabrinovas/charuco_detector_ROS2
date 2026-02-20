@@ -69,7 +69,7 @@ public:
 									cv::Vec3d &_camera_rotation_out, cv::Vec3d &_camera_translation_out,
 									cv::InputOutputArray _image_with_detection_results, bool _show_rejected_markers);
 	void fillPose(const cv::Vec3d &_camera_rotation, const cv::Vec3d &_camera_translation, geometry_msgs::msg::PoseStamped &_pose_in_out);
-	void getCameraCalibrationCoefficient();
+	// void getCameraCalibrationCoefficient(); // ELIMINADA: Ya no se usa
 private:
 	cv::Ptr<cv::aruco::DetectorParameters> detector_parameters_;
 	cv::Ptr<cv::aruco::Dictionary> dictionary_;
