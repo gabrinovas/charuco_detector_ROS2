@@ -2,20 +2,26 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>charuco_detector</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="iclab_luis@todo.todo">iclab_luis</maintainer>
-  <license>TODO: License declaration</license>
+  <version>1.0.0</version>
+  <description>ChArUco board detector for ROS2 Humble</description>
+  <maintainer email="your_email@example.com">user</maintainer>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
-  <depend>charuco_detector_interfaces</depend>
+  <depend>rclcpp_components</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>charuco_detector_interfaces</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>libopencv-dev</depend>
+  <depend>libeigen3-dev</depend>
 
-  
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 

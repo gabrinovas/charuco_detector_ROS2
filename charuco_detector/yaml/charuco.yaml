@@ -11,7 +11,6 @@ charuco_detector:
       minCornerDistanceRate: 0.05
       minDistanceToBorder: 3
       minMarkerDistanceRate: 0.05
-      cornerRefinementMethod: 0
       cornerRefinementWinSize: 5
       cornerRefinementMaxIterations: 30
       cornerRefinementMinAccuracy: 0.1
@@ -21,12 +20,3 @@ charuco_detector:
       maxErroneousBitsInBorderRate: 0.35
       minOtsuStdDev: 5.0
       errorCorrectionRate: 0.6
-      aprilTagMinClusterPixels: 5
-      aprilTagMaxNmaxima: 10
-      aprilTagCriticalRad: 0.17453292519
-      aprilTagMaxLineFitMse: 10.0
-      aprilTagMinWhiteBlackDiff: 5
-      aprilTagDeglitch: 0
-      aprilTagQuadDecimate: 0.0
-      aprilTagQuadSigma: 0.0
-      detectInvertedMarker: false
