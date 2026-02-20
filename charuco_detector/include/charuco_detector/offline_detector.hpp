@@ -4,10 +4,14 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <memory>
+
 #include <opencv2/opencv.hpp>
 #include <opencv2/aruco/charuco.hpp>
 
-class OfflineChArUcoDetector {
+#include "rclcpp/rclcpp.hpp"
+
+class OfflineChArUcoDetector : public rclcpp::Node {
 public:
     OfflineChArUcoDetector();
     ~OfflineChArUcoDetector();
